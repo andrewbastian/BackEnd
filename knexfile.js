@@ -1,49 +1,55 @@
-module.exports = {
-    development:{
-        client:"sqlite3",
-        useNullAsDefault:true,
-        connection:{
-            filename:'./utils/data/users.db3'
-        },
-        migrations:{
-            directory:"./utils/data/migrations"
-        },
-        seeds:{
-            directory:"./utils/data/seeds"
-        },
+// Update with your config settings.
 
+module.exports = {
+    development: {
+        client: 'sqlite3',
+        useNullAsDefault: true,
+        connection: {
+            filename: './utils/data/users.db3',
+        },
+        migrations: {
+            directory: './utils/data/migrations',
+        },
+        seeds: {
+            directory: './utils/data/seeds',
+        },
+        // add the following
         pool: {
             afterCreate: (conn, done) => {
-              conn.run("PRAGMA foreign_keys = ON", done); // enforce FK
-            }
-          }
-    },
+                // runs after a connection is made to the sqlite engine
+                conn.run('PRAGMA foreign_keys = ON', done); // turn on FK enforcement
+            },
+        },
 
-     production: {
-        client: "pg",
-        connection: process.env.DATABASE_URL || {
-        database: "my_db",
-        user: "username",
-        password: "password"
-        },
-        migrations: {
-        directory: "./utils/data/migrations"
-        },
-        seeds: {
-        directory: "./utils/data/seeds"
-        }
-  },
-     testing: {
-        client: "sqlite3",
-        useNullAsDefault:true,
-        connection:{
-            filename:'./utils/data/test.db3'
-        },
-        migrations: {
-        directory: "./utils/data/migrations"
-        },
-        seeds: {
-        directory: "./utils/data/seeds"
-        }
-  }
-}
+        // staging: {
+        //     client: 'postgresql',
+        //     connection: {
+        //         database: 'my_db',
+        //         user: 'username',
+        //         password: 'password',
+        //     },
+        //     pool: {
+        //         min: 2,
+        //         max: 10,
+        //     },
+        //     migrations: {
+        //         tableName: 'knex_migrations',
+        //     },
+        // },
+
+        // production: {
+        //     client: 'postgresql',
+        //     connection: {
+        //         database: 'my_db',
+        //         user: 'username',
+        //         password: 'password',
+        //     },
+        //     pool: {
+        //         min: 2,
+        //         max: 10,
+        //     },
+        //     migrations: {
+        //         tableName: 'knex_migrations',
+        //     },
+    },
+};
