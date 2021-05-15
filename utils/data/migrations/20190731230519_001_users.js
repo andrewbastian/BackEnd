@@ -8,6 +8,8 @@ exports.up = function (knex) {
             tbl.string("password", 255).notNullable();
 
             tbl.string("phone", 255).notNullable();
+
+            tbl.string("profile_pic")
         })
         .createTable("plants", (tbl) => {
             tbl.increments();
@@ -15,8 +17,10 @@ exports.up = function (knex) {
             tbl.string("name", 255).notNullable();
             tbl.string("type", 255).notNullable();
             tbl.string("location", 255).notNullable();
-            tbl.integer("water_schedule").notNullable();
-            tbl.timestamp("created_at").defaultTo(knex.fn.now())
+            tbl.integer("water_frq", 255)
+            tbl.datetime("next_watering",255)
+            tbl.datetime("last_watering",255)
+            tbl.text("notes")
             tbl.integer("user_id", 255)
                 .notNullable()
                 .references("id")
@@ -25,7 +29,7 @@ exports.up = function (knex) {
                 .onDelete("CASCADE");
         })
 
-        .createTable("schedule", (tbl) => {
+        .createTable("plant_photos", (tbl) => {
             tbl.increments();
 
             tbl.integer("plant_id")
@@ -42,7 +46,7 @@ exports.up = function (knex) {
                 .onUpdate("CASCADE")
                 .onDelete("CASCADE");
 
-            /*tbl.date("water_schedule").notNullable();*/
+            tbl.string("URL").notNullable();
         });
 };
 

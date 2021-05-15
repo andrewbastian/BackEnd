@@ -32,7 +32,6 @@ router.get('/dashboard/:id', authenticate, async (req, res) => {
 router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, async (req, res) => {
     const { plant_id } = req.params;
     const id = plant_id;
-    console.log(id);
     try {
         const plant = await Users.getPlant({ id });
         res.status(200).json(plant);
@@ -42,7 +41,7 @@ router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, asy
 });
 
 //workd
-router.get('/dashboard/:id/my_plant/:plant_id/schedules', authenticate, UserOwnsPlant, async (req, res) => {
+/*router.get('/dashboard/:id/my_plant/:plant_id/schedules', authenticate, UserOwnsPlant, async (req, res) => {
     const { id, plant_id } = req.params;
 
     try {
@@ -53,7 +52,7 @@ router.get('/dashboard/:id/my_plant/:plant_id/schedules', authenticate, UserOwns
     } catch (error) {
         res.status(500).json({ error: 'could not add schedule' });
     }
-});
+});*/
 
 router.post('/register', async (req, res) => {
 // const usernameExist = await User.findOne({ username: req.body.username });
@@ -97,10 +96,11 @@ router.post('/login', async (req, res) => {
     }
 });
 
+//Create New Plant
 router.post('/dashboard/:id/plants/add', authenticate, duplicateCheck, async (req, res) => {
     const { id } = req.params;
-    const { name, location, type } = req.body;
-    if ((!name, !location, !type)) {
+    const { name, location, type, water_frq, next_watering, last_watering } = req.body;
+    if ((!name, !location, !type, !water_frq)) {
         res.status(400).json({ error: 'require plant name, type, and location' });
     } else {
         try {
@@ -112,7 +112,8 @@ router.post('/dashboard/:id/plants/add', authenticate, duplicateCheck, async (re
     }
 });
 
-router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, UserOwnsPlant, async (req, res) => {
+//Create Plant schedule
+/*router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, UserOwnsPlant, async (req, res) => {
     const { water_schedule } = req.body;
     const { id, plant_id } = req.params;
 
@@ -129,8 +130,9 @@ router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, User
             res.status(500).json({ error: 'could not add schedule' });
         }
     }
-});
+});*/
 
+//Update Plant
 router.put('/dashboard/:id/my_plant/:plant_id/update', authenticate, UserOwnsPlant, async (req, res) => {
     const { plant_id } = req.params;
     try {
@@ -141,6 +143,7 @@ router.put('/dashboard/:id/my_plant/:plant_id/update', authenticate, UserOwnsPla
     }
 });
 
+//Update User
 router.put('/dashboard/:id/user_settings', authenticate, async (req, res) => {
     const { phone } = req.body;
     const { id } = req.params;
@@ -156,6 +159,8 @@ router.put('/dashboard/:id/user_settings', authenticate, async (req, res) => {
     }
 });
 
+//Update Water Schedule
+/*
 router.put('/dashboard/:id/my_plant/:plant_id/update/:sch_id', authenticate, UserOwnsPlant, async (req, res) => {
     const { sch_id } = req.params;
     console.log(sch_id);
@@ -166,7 +171,9 @@ router.put('/dashboard/:id/my_plant/:plant_id/update/:sch_id', authenticate, Use
         res.status(500).json({ error: 'could not update schedule' });
     }
 });
+*/
 
+//Delete Plant
 router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwnsPlant, async (req, res) => {
     const { plant_id } = req.params;
 
@@ -178,7 +185,8 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwns
     }
 });
 
-router.delete('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req, res) => {
+//Delete Water Schedule
+/*router.delete('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req, res) => {
     const schedule_id = req.params.sch_id;
     try {
         const remove = await Users.deleteSchedule(schedule_id);
@@ -186,6 +194,6 @@ router.delete('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, 
     } catch (error) {
         res.status(500).json({ error: 'could not schedule' });
     }
-});
+});*/
 
 module.exports = router;
