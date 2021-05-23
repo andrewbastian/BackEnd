@@ -1,21 +1,25 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Users = require('./user-model');
-const db = require('../../data/dbConfig');
+const Users = require("./user-model");
+const db = require("../../data/dbConfig");
 
-const { authenticate, UserOwnsPlant, duplicateCheck } = require('../../auth/authenticate');
+const {
+    authenticate,
+    UserOwnsPlant,
+    duplicateCheck,
+} = require("../../auth/authenticate");
 
 router.use(express.json());
 
-router.get('/', (req, res) => {
-    res.send('<h1>Water my plants</h1>');
+router.get("/", (req, res) => {
+    res.send("<h1>Water my plants</h1>");
 });
 
-router.get('/dashboard/:id', authenticate, async (req, res) => {
+router.get("/dashboard/:id", authenticate, async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-        res.status(404).json({ message: 'Please provide an id' });
+        res.status(404).json({ message: "Please provide an id" });
     } else {
         try {
             const plants = await Users.getPlants(id);
@@ -29,16 +33,21 @@ router.get('/dashboard/:id', authenticate, async (req, res) => {
 });
 
 //get individual plant
-router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, async (req, res) => {
-    const { plant_id } = req.params;
-    const id = plant_id;
-    try {
-        const plant = await Users.getPlant({ id });
-        res.status(200).json(plant);
-    } catch (error) {
-        res.status(500).json({ error: 'could not retreive plant' });
+router.get(
+    "/dashboard/:id/my_plant/:plant_id",
+    authenticate,
+    UserOwnsPlant,
+    async (req, res) => {
+        const { plant_id } = req.params;
+        const id = plant_id;
+        try {
+            const plant = await Users.getPlant({ id });
+            res.status(200).json(plant);
+        } catch (error) {
+            res.status(500).json({ error: "could not retreive plant" });
+        }
     }
-});
+);
 
 //workd
 /*router.get('/dashboard/:id/my_plant/:plant_id/schedules', authenticate, UserOwnsPlant, async (req, res) => {
@@ -54,18 +63,19 @@ router.get('/dashboard/:id/my_plant/:plant_id', authenticate, UserOwnsPlant, asy
     }
 });*/
 
-router.post('/register', async (req, res) => {
-// const usernameExist = await User.findOne({ username: req.body.username });
+router.post("/register", async (req, res) => {
+    // const usernameExist = await User.findOne({ username: req.body.username });
 
-// if (usernameExist) {
-//     res.status(400).json({ error: 'username already Exist' });
-// }
-
+    // if (usernameExist) {
+    //     res.status(400).json({ error: 'username already Exist' });
+    // }
 
     const { username, password, phone } = req.body;
 
     if (!username || !password || !phone) {
-        res.status(400).json({ error: 'require username, password, and phone number' });
+        res.status(400).json({
+            error: "require username, password, and phone number",
+        });
     } else {
         try {
             /*console.log("REGISTER", reg.body)*/
@@ -77,40 +87,57 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        res.status(400).json({ error: 'require username and password' });
+        res.status(400).json({ error: "require username and password" });
     } else {
         try {
-            console.log('try',req.body);
+            console.log("try", req.body);
             const user = await Users.login(req.body);
             if (user) {
                 res.status(200).json(user);
             } else {
-                res.status(200).json({ message: 'incorrect username or password' });
+                res.status(200).json({
+                    message: "incorrect username or password",
+                });
             }
         } catch (error) {
-            res.status(500).json({ error: 'could not login' });
+            res.status(500).json({ error: "could not login" });
         }
     }
 });
 
 //Create New Plant
-router.post('/dashboard/:id/plants/add', authenticate, duplicateCheck, async (req, res) => {
-    const { id } = req.params;
-    const { name, location, type, water_frq, next_watering, last_watering } = req.body;
-    if ((!name, !location, !type, !water_frq)) {
-        res.status(400).json({ error: 'require plant name, type, and location' });
-    } else {
-        try {
-            const plant = await Users.addPlant(req.body, id);
-            res.status(200).json(plant);
-        } catch (error) {
-            res.status(500).json({ error: 'could not add plant' });
+router.post(
+    "/dashboard/:id/plants/add",
+    authenticate,
+    duplicateCheck,
+    async (req, res) => {
+        const { id } = req.params;
+        const {
+            name,
+            light,
+            type,
+            water_frq,
+            next_watering,
+            last_watering,
+            notes,
+        } = req.body;
+        if ((!name, !light, !type, !water_frq)) {
+            res.status(400).json({
+                error: "require plant name, type, and light",
+            });
+        } else {
+            try {
+                const plant = await Users.addPlant(req.body, id);
+                res.status(200).json(plant);
+            } catch (error) {
+                res.status(500).json({ error: "could not add plant" });
+            }
         }
     }
-});
+);
 
 //Create Plant schedule
 /*router.post('/dashboard/:id/my_plant/:plant_id/add_schedule', authenticate, UserOwnsPlant, async (req, res) => {
@@ -133,28 +160,33 @@ router.post('/dashboard/:id/plants/add', authenticate, duplicateCheck, async (re
 });*/
 
 //Update Plant
-router.put('/dashboard/:id/my_plant/:plant_id/update', authenticate, UserOwnsPlant, async (req, res) => {
-    const { plant_id } = req.params;
-    try {
-        const updated = await Users.updatePlant(req.body, plant_id);
-        res.status(201).json(updated);
-    } catch (error) {
-        res.status(500).json({ error: 'could not update plant' });
+router.put(
+    "/dashboard/:id/my_plant/:plant_id/update",
+    authenticate,
+    UserOwnsPlant,
+    async (req, res) => {
+        const { plant_id } = req.params;
+        try {
+            const updated = await Users.updatePlant(req.body, plant_id);
+            res.status(201).json(updated);
+        } catch (error) {
+            res.status(500).json({ error: "could not update plant" });
+        }
     }
-});
+);
 
 //Update User
-router.put('/dashboard/:id/user_settings', authenticate, async (req, res) => {
+router.put("/dashboard/:id/user_settings", authenticate, async (req, res) => {
     const { phone } = req.body;
     const { id } = req.params;
     if (!phone) {
-        res.status(400).json({ error: 'please add a phone number' });
+        res.status(400).json({ error: "please add a phone number" });
     } else {
         try {
             const updated = await Users.updateUser(req.body, id);
             res.status(201).json(updated);
         } catch (error) {
-            res.status(500).json({ error: 'could not update phone number' });
+            res.status(500).json({ error: "could not update phone number" });
         }
     }
 });
@@ -174,16 +206,21 @@ router.put('/dashboard/:id/my_plant/:plant_id/update/:sch_id', authenticate, Use
 */
 
 //Delete Plant
-router.delete('/dashboard/:id/my_plant/:plant_id/remove', authenticate, UserOwnsPlant, async (req, res) => {
-    const { plant_id } = req.params;
+router.delete(
+    "/dashboard/:id/my_plant/:plant_id/remove",
+    authenticate,
+    UserOwnsPlant,
+    async (req, res) => {
+        const { plant_id } = req.params;
 
-    try {
-        const remove = await Users.deletePlant(plant_id);
-        res.status(200).end();
-    } catch (error) {
-        res.status(500).json({ error: 'could not delete plant' });
+        try {
+            const remove = await Users.deletePlant(plant_id);
+            res.status(200).end();
+        } catch (error) {
+            res.status(500).json({ error: "could not delete plant" });
+        }
     }
-});
+);
 
 //Delete Water Schedule
 /*router.delete('/dashboard/:id/my_plant/:plant_id/remove/:sch_id', authenticate, UserOwnsPlant, async (req, res) => {

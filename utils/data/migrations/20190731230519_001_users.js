@@ -16,7 +16,7 @@ exports.up = function (knex) {
 
             tbl.string("name", 255).notNullable();
             tbl.string("type", 255).notNullable();
-            tbl.string("location", 255).notNullable();
+            tbl.string("light", 255).notNullable();
             tbl.integer("water_frq", 255)
             tbl.datetime("next_watering",255)
             tbl.datetime("last_watering",255)
@@ -52,7 +52,7 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
     return knex.schema
-        .dropTableIfExists("schedule")
+        .dropTableIfExists("plant_photos")
         .dropTableIfExists("plants")
         .dropTableIfExists("users");
 };
