@@ -1,22 +1,10 @@
-const express = require('express');
+const express = require("express");
 const server = express();
-const cors = require('cors');
+const cors = require("cors");
 
-const UserRouter = require('../utils/resources/users/users-router');
+const UserRouter = require("../utils/resources/users/users-router");
 
-
-
-server.use(cors())
-server.use('/', UserRouter);
-
-
-
-
-
-
-
-
-
-
+server.use(cors({origin: process.env.DATABASE_URL}));
+server.use("/", UserRouter);
 
 module.exports = server;

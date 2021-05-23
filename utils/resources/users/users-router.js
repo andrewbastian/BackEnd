@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("./user-model");
-const db = require("../../data/dbConfig");
 
 const {
     authenticate,
@@ -124,7 +123,15 @@ router.post(
             last_watering,
             notes,
         } = req.body;
-        if ((!name, !light, !type, !water_frq)) {
+        if (
+            (!name,
+            !light,
+            !type,
+            !water_frq,
+            !next_watering,
+            !last_watering,
+            !notes)
+        ) {
             res.status(400).json({
                 error: "require plant name, type, and light",
             });
@@ -214,7 +221,7 @@ router.delete(
         const { plant_id } = req.params;
 
         try {
-            const remove = await Users.deletePlant(plant_id);
+            await Users.deletePlant(plant_id);
             res.status(200).end();
         } catch (error) {
             res.status(500).json({ error: "could not delete plant" });
