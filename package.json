@@ -29,7 +29,8 @@
     "knex": "^0.19.1",
     "knex-cleaner": "^1.2.1",
     "pg": "^7.12.0",
-    "resource": "^0.8.1"
+    "resource": "^0.5.5",
+    "sqlite3": "^5.0.1"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
@@ -38,7 +39,6 @@
     "hoek": ">=4.2.1",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
-    "sqlite3": "^4.0.9",
     "supertest": "^4.0.2"
   }
 }
