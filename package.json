@@ -9,7 +9,7 @@
         "start": "node index.js"
     },
     "engines": {
-        "node": "12"
+        "node": "12.x"
     },
     "repository": {
         "type": "git",
