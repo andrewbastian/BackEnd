@@ -8,7 +8,7 @@ require('dotenv').config()
 const corsOptions= {
     origin: process.env.DATABASE_URL
 }
-server.use(cors(coresOptions));
+server.use(cors(corsOptions));
 
 server.use("/", UserRouter);
 
