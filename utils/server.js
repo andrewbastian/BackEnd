@@ -5,7 +5,7 @@ const cors = require("cors");
 const UserRouter = require("../utils/resources/users/users-router");
 
 const corsOptions= {
-    origin: `${process.env.DATABASE_URL}`
+    origin: process.env.DATABASE_URL
 }
 server.use(cors(coresOptions));
 
